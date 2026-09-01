@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chess Exchange</title>
+<link rel="stylesheet" href="/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>♞</text></svg>">
+</head>
+<body>
+<header>
+  <div class="brand"><span class="mark">♞</span>Chess Exchange<span class="tag">play money</span></div>
+  <div class="me">
+    <input id="me-input" class="me-input" placeholder="pick a trader name…" maxlength="24" hidden>
+    <button id="btn-join" class="join" hidden>Join</button>
+    <span id="me-name" class="me-name"></span>
+    <span id="me-balance" class="me-balance"></span>
+    <button id="btn-rename" class="ghost" hidden>Sign out</button>
+  </div>
+</header>
+
+<div class="layout">
+  <main id="rails"></main>
+  <aside>
+    <div class="panel">
+      <h3>Portfolio</h3>
+      <div id="portfolio" class="portfolio"></div>
+    </div>
+    <div class="panel">
+      <h3>Leaderboard</h3>
+      <ol id="leaderboard" class="leaderboard"></ol>
+    </div>
+    <div class="panel">
+      <h3>Recent trades</h3>
+      <div id="tape" class="tape"></div>
+    </div>
+  </aside>
+</div>
+
+<div id="detail" class="detail-overlay" hidden>
+  <div class="detail">
+    <button class="close" id="detail-close">✕</button>
+    <div class="detail-head">
+      <div>
+        <div id="d-title" class="d-title"></div>
+        <div id="d-sub" class="d-sub"></div>
+      </div>
+      <div id="d-badge"></div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-left">
+        <canvas id="d-chart" width="640" height="240"></canvas>
+        <div id="d-board-wrap" hidden>
+          <div class="clocks">
+            <span id="d-clock-b" class="clock">–</span>
+            <span id="d-moves" class="movelist"></span>
+            <span id="d-clock-w" class="clock">–</span>
+          </div>
+          <div id="d-board" class="board"></div>
+        </div>
+        <div id="d-live-note" class="live-note" hidden>
+          Board feed isn't public for live chess.com games — trade on players, ratings and time,
+          or use the browser extension / <code>npm run login</code> to light this board up.
+          <a id="d-link" target="_blank" rel="noreferrer">watch on chess.com ↗</a>
+        </div>
+      </div>
+      <div class="detail-right">
+        <div class="ticket">
+          <div class="outcomes" id="d-outcomes"></div>
+          <div class="side-toggle">
+            <button id="d-buy" class="on">Buy</button><button id="d-sell">Sell</button>
+          </div>
+          <input id="d-amount" type="number" min="1" step="1" value="25">
+          <div id="d-quote" class="quote"></div>
+          <button id="d-submit" class="submit">Buy</button>
+          <div id="d-error" class="error"></div>
+          <div id="d-pos" class="mypos"></div>
+        </div>
+        <div class="market-trades" id="d-trades"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>

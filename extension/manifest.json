@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Chess Exchange Companion",
+  "version": "0.1.0",
+  "description": "Shows play-money exchange odds on chess.com live games and relays the board to your local Chess Exchange.",
+  "permissions": [],
+  "host_permissions": ["http://localhost:4600/*"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["https://www.chess.com/game/live/*", "https://www.chess.com/play/*", "https://www.chess.com/game/*"],
+      "js": ["reader.js"],
+      "world": "MAIN",
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://www.chess.com/game/live/*", "https://www.chess.com/play/*", "https://www.chess.com/game/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
