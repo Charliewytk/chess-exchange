@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chess Exchange — engine demo (play money)</title>
+<link rel="stylesheet" href="./style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>♞</text></svg>">
+</head>
+<body>
+<header>
+  <div class="brand"><span class="mark">♞</span>Chess Exchange<span class="tag">play money · engine demo</span></div>
+</header>
+
+<main>
+  <p class="lede">
+    Paste a FEN. This page runs the same in-process alpha-beta as
+    <code>lib/engine.js</code> and shows White / Draw / Black probabilities.
+    Elo is only used when there is no board to evaluate.
+  </p>
+
+  <label class="fen-label" for="fen">FEN</label>
+  <textarea id="fen" rows="3" spellcheck="false" autocomplete="off">rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1</textarea>
+  <div class="actions">
+    <button id="eval" type="button">Evaluate</button>
+    <button id="start" type="button" class="ghost">Starting position</button>
+    <button id="mate" type="button" class="ghost">Mate in one (White)</button>
+  </div>
+
+  <p id="source" class="source" aria-live="polite"></p>
+
+  <div class="wdl" role="group" aria-label="White Draw Black">
+    <div class="price w"><span id="pw" class="num">—</span><small>White</small></div>
+    <div class="price d"><span id="pd" class="num">—</span><small>Draw</small></div>
+    <div class="price b"><span id="pb" class="num">—</span><small>Black</small></div>
+  </div>
+  <div class="bar" aria-hidden="true">
+    <i id="bw" class="w"></i><i id="bd" class="d"></i><i id="bb" class="b"></i>
+  </div>
+
+  <aside class="honest">
+    <p>This is <strong>play money</strong>. It is not a book, not advice, and
+    not affiliated with chess.com. No real-money wallets, no brokerage,
+    no credentials, no chess.com login, no headless bridge, no launchd.</p>
+    <p>The full product is a play-money prediction market you run locally
+    with <code>npm start</code>. This page is only the engine so a stranger
+    can try a position without a server.</p>
+    <!-- GUMROAD: Charles can later paste an existing £5 Gumroad URL here.
+         He still clicks payments. Do not invent a new SKU. Agents never buy or post. -->
+  </aside>
+</main>
+
+<script type="module" src="./demo.js"></script>
+</body>
+</html>

@@ -10,6 +10,37 @@ npm start        # → http://localhost:4600
 
 Zero dependencies (Node 18+; built on Node 26).
 
+## Try the engine without `npm start`
+
+Strangers can paste a FEN and see White / Draw / Black on a static GitHub
+Pages demo. It uses a browser-safe copy of the in-process alpha-beta in
+`lib/engine.js` (`docs/engine.js` must stay identical). Elo is only the
+no-board fallback.
+
+This repo has no Pages workflow. After this lands on `main`, one click:
+
+1. Open the repo on GitHub → **Settings → Pages**
+2. **Source:** Deploy from a branch
+3. **Branch:** `main` · **Folder:** `/docs`
+4. Save
+
+The site will be `https://charliewytk.github.io/chess-exchange/`.
+Agents do not turn Pages on.
+
+Local check (any static file server; not `npm start`):
+
+```bash
+python3 -m http.server 8080 --directory docs
+# → http://localhost:8080
+```
+
+### Later: a £5 Gumroad link (Charles clicks payments)
+
+The demo is free to try. If you later want a paid note on that page, paste
+an **existing** Gumroad URL into the `GUMROAD` comment in `docs/index.html`.
+Do not invent a new SKU. You still click checkout yourself. Agents never
+buy or post. There is no live P&L on this page.
+
 ## What you get
 
 - **LIVE BOARD markets (lichess TV)** — lichess's public streaming API serves its
