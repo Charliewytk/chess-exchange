@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "login": "node scripts/login.js"
+    "login": "node scripts/login.js",
+    "test": "node --test test/*.test.js"
   }
 }
