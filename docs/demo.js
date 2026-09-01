@@ -15,7 +15,9 @@ function render(result) {
   $("bb").style.flex = String(b);
   $("source").textContent = result.source === "engine"
     ? "Source: in-process alpha-beta (lib/engine.js)."
-    : "No board to evaluate — Elo fallback only (equal 1500s, blitz draw rate).";
+    : result.reason === "unparseable"
+      ? "FEN did not parse — Elo fallback only (equal 1500s, blitz draw rate)."
+      : "No board to evaluate — Elo fallback only (equal 1500s, blitz draw rate).";
 }
 
 function run() {

@@ -15,10 +15,10 @@ export function evaluateDemo(fen, eloFallback) {
     ? eloFallback
     : equalEloFallback();
   const key = String(fen || "").trim();
-  if (!key) return { source: "elo", wdl: elo.slice() };
+  if (!key) return { source: "elo", wdl: elo.slice(), reason: "empty" };
   const wdl = engineWdl(key);
-  if (!wdl) return { source: "elo", wdl: elo.slice() };
-  return { source: "engine", wdl };
+  if (!wdl) return { source: "elo", wdl: elo.slice(), reason: "unparseable" };
+  return { source: "engine", wdl, reason: null };
 }
 
 export function formatPct(p) {

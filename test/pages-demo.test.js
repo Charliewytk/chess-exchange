@@ -72,11 +72,15 @@ describe("GitHub Pages demo (static FEN → WDL)", () => {
 
     const empty = evaluateDemo("", elo);
     assert.equal(empty.source, "elo");
+    assert.equal(empty.reason, "empty");
     assert.deepEqual(empty.wdl, elo);
 
     const junk = evaluateDemo("not-a-fen", elo);
     assert.equal(junk.source, "elo");
+    assert.equal(junk.reason, "unparseable");
     assert.deepEqual(junk.wdl, elo);
+
+    assert.deepEqual(equalEloFallback(), eloPrior(1500, 1500, "blitz"));
   });
 
   it("static page is honest play-money copy with a later Gumroad slot", () => {
