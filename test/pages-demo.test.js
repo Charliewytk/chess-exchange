@@ -99,4 +99,25 @@ describe("GitHub Pages demo (static FEN → WDL)", () => {
     assert.match(html, /GUMROAD/);
     assert.doesNotMatch(html, /https:\/\/[\w.-]*gumroad\.com\/l\/[A-Za-z0-9-]+/);
   });
+
+  it("GitHub Actions deploys docs/ via upload-pages-artifact and deploy-pages", () => {
+    const workflow = readFileSync(join(root, ".github/workflows/pages.yml"), "utf8");
+    assert.match(workflow, /actions\/upload-pages-artifact@/);
+    assert.match(workflow, /actions\/deploy-pages@/);
+    assert.match(workflow, /path:\s*['"]?docs['"]?/);
+    assert.match(workflow, /github-pages/);
+    assert.match(workflow, /pages:\s*write/);
+    assert.match(workflow, /id-token:\s*write/);
+    assert.doesNotMatch(workflow, /(?:^|\n)\s+run:\s*npm start\b/);
+    assert.doesNotMatch(workflow, /gumroad\.com\/l\//i);
+    assert.doesNotMatch(workflow, /Charliewytk\.github\.io/i);
+
+    const readme = readFileSync(join(root, "README.md"), "utf8");
+    assert.doesNotMatch(readme, /This repo has no Pages workflow/);
+    assert.match(readme, /GitHub Actions/);
+    assert.match(readme, /upload-pages-artifact/);
+    assert.match(readme, /deploy-pages/);
+    assert.match(readme, /play money/i);
+    assert.doesNotMatch(readme, /https:\/\/[\w.-]*gumroad\.com\/l\/[A-Za-z0-9-]+/);
+  });
 });
