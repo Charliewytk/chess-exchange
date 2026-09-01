@@ -17,15 +17,17 @@ Pages demo. It uses a browser-safe copy of the in-process alpha-beta in
 `lib/engine.js` (`docs/engine.js` must stay identical). Elo is only the
 no-board fallback.
 
-This repo has no Pages workflow. After this lands on `main`, one click:
+`docs/` is deployed by GitHub Actions (`.github/workflows/pages.yml`):
+`actions/upload-pages-artifact` then `actions/deploy-pages`. Agents do
+not turn Pages on, and they do not touch `Charliewytk.github.io`. If the
+project site 404s, one click (or a later Pages click) is enough:
 
-1. Open the repo on GitHub → **Settings → Pages**
-2. **Source:** Deploy from a branch
-3. **Branch:** `main` · **Folder:** `/docs`
-4. Save
+1. Open this repo on GitHub → **Settings → Pages**
+2. **Source:** GitHub Actions
+3. Save. If the first run failed before Pages was enabled, re-run
+   **Deploy Pages demo** from the Actions tab (or push to `main` again).
 
 The site will be `https://charliewytk.github.io/chess-exchange/`.
-Agents do not turn Pages on.
 
 Local check (any static file server; not `npm start`):
 
