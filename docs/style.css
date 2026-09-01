@@ -1,0 +1,101 @@
+/* Static engine demo — same tokens as the play-money app. */
+* { box-sizing: border-box; margin: 0; }
+
+:root {
+  --bg: #000000;
+  --surface: #131316;
+  --surface-2: #1c1c1f;
+  --hairline: rgba(255, 255, 255, .09);
+  --hairline-strong: rgba(255, 255, 255, .16);
+  --text: #f5f5f7;
+  --text-2: #a1a1a6;
+  --text-3: #6e6e73;
+  --blue: #0a84ff;
+  --purple: #bf5af0;
+  --orange: #ff9f0a;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.47;
+  letter-spacing: -.012em;
+  -webkit-font-smoothing: antialiased;
+}
+
+header {
+  display: flex; align-items: center;
+  padding: 0 24px; height: 52px;
+  border-bottom: 1px solid var(--hairline);
+}
+.brand { font-size: 16px; font-weight: 600; letter-spacing: -.02em; }
+.brand .mark { opacity: .9; margin-right: 5px; }
+.tag { color: var(--text-3); font-size: 12px; font-weight: 400; margin-left: 10px; }
+
+main { max-width: 640px; margin: 0 auto; padding: 34px 24px 80px; }
+
+.lede { color: var(--text-2); margin-bottom: 22px; }
+.lede code, aside code {
+  color: var(--text); font-size: 12.5px;
+  background: var(--surface-2); padding: 1px 5px; border-radius: 5px;
+}
+
+.fen-label {
+  display: block; font-size: 12px; color: var(--text-3);
+  margin-bottom: 6px; letter-spacing: -.006em;
+}
+#fen {
+  width: 100%; resize: vertical;
+  background: var(--surface); color: var(--text);
+  border: 1px solid var(--hairline); border-radius: 10px;
+  padding: 10px 12px; font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  outline: none;
+}
+#fen:focus { border-color: var(--hairline-strong); }
+
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 18px; }
+button {
+  font-family: inherit; letter-spacing: inherit; cursor: pointer;
+}
+#eval {
+  background: var(--blue); color: #fff; border: none; border-radius: 980px;
+  padding: 7px 16px; font-size: 13px; font-weight: 500;
+}
+#eval:hover { filter: brightness(1.08); }
+.ghost {
+  background: none; border: 1px solid var(--hairline); color: var(--text-2);
+  border-radius: 980px; padding: 6px 12px; font-size: 13px;
+}
+.ghost:hover { color: var(--text); border-color: var(--hairline-strong); }
+
+.source { color: var(--text-3); font-size: 12.5px; min-height: 18px; margin-bottom: 12px; }
+
+.wdl {
+  display: flex; border: 1px solid var(--hairline); border-radius: 9px; overflow: hidden;
+}
+.price {
+  flex: 1; text-align: center; padding: 12px 4px; background: var(--surface);
+  font-size: 22px; font-weight: 590; font-variant-numeric: tabular-nums;
+  border-right: 1px solid var(--hairline);
+}
+.price:last-child { border-right: none; }
+.price small {
+  display: block; font-weight: 400; color: var(--text-3);
+  font-size: 11px; margin-top: 2px;
+}
+.price.w { color: var(--blue); } .price.d { color: var(--purple); } .price.b { color: var(--orange); }
+
+.bar {
+  display: flex; height: 6px; border-radius: 6px; overflow: hidden;
+  margin-top: 10px; background: var(--surface-2);
+}
+.bar i { display: block; height: 100%; }
+.bar .w { background: var(--blue); } .bar .d { background: var(--purple); } .bar .b { background: var(--orange); }
+
+.honest {
+  margin-top: 36px; color: var(--text-3); font-size: 13px;
+}
+.honest p + p { margin-top: 10px; }
+.honest strong { color: var(--text-2); font-weight: 500; }
