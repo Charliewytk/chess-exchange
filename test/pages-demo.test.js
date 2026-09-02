@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { engineWdl, priorForPosition } from "../lib/engine.js";
@@ -14,6 +14,23 @@ const START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 const MATE_IN_ONE_WHITE = "6k1/8/6K1/8/8/8/8/4Q3 w - - 0 1";
 // Same idea, Black to move (Qe1#).
 const MATE_IN_ONE_BLACK = "4q3/8/8/8/8/6k1/8/6K1 b - - 0 1";
+
+function leftoverCallsGhApiToSetPages(source) {
+  if (!/\bgh\s+api\b/.test(source)) return false;
+  return /\/pages\b/.test(source) || /\benablement\b/.test(source);
+}
+
+function listLeftoverScripts(rootDir) {
+  const found = [];
+  const scriptsDir = join(rootDir, "scripts");
+  for (const name of readdirSync(scriptsDir, { withFileTypes: true })) {
+    if (name.isFile()) found.push(join(scriptsDir, name.name));
+  }
+  for (const name of readdirSync(rootDir, { withFileTypes: true })) {
+    if (name.isFile() && name.name.endsWith(".sh")) found.push(join(rootDir, name.name));
+  }
+  return found;
+}
 
 function roughlyBalanced(wdl) {
   assert.ok(wdl, "expected a WDL vector");
@@ -176,6 +193,62 @@ describe("GitHub Pages demo (static FEN → WDL)", () => {
     assert.match(evaluate, /from ["']\.\/engine\.js["']/);
     for (const file of ["docs/style.css", "docs/demo.js", "docs/evaluate.js", "docs/engine.js"]) {
       assert.ok(readFileSync(join(root, file), "utf8").length > 0, `${file} must stay loadable`);
+    }
+  });
+
+  it("treats gh api Pages enablement as a leftover toggle", () => {
+    assert.equal(
+      leftoverCallsGhApiToSetPages(
+        "gh api -X POST /repos/Charliewytk/chess-exchange/pages -f build_type=workflow",
+      ),
+      true,
+    );
+    assert.equal(
+      leftoverCallsGhApiToSetPages(
+        "gh api repos/Charliewytk/chess-exchange/pages -F enablement=true",
+      ),
+      true,
+    );
+    assert.equal(leftoverCallsGhApiToSetPages("console.log('login only')"), false);
+    assert.equal(leftoverCallsGhApiToSetPages("gh api user"), false);
+  });
+
+  it("leftover scripts do not call gh api to set Pages; deploy stays the Actions path", () => {
+    const leftover = listLeftoverScripts(root);
+    assert.ok(leftover.length >= 1, "expected the existing scripts/ leftover surface");
+    for (const file of leftover) {
+      const source = readFileSync(file, "utf8");
+      assert.equal(
+        leftoverCallsGhApiToSetPages(source),
+        false,
+        `${file} must not call gh api to set Pages`,
+      );
+    }
+
+    const workflowNames = readdirSync(join(root, ".github/workflows")).filter(
+      (name) => name.endsWith(".yml") || name.endsWith(".yaml"),
+    );
+    assert.ok(
+      workflowNames.includes("pages.yml"),
+      "existing Actions deploy path .github/workflows/pages.yml must stay",
+    );
+    for (const name of workflowNames) {
+      const workflow = readFileSync(join(root, ".github/workflows", name), "utf8");
+      const workflowYaml = workflow
+        .split("\n")
+        .filter((line) => !/^\s*#/.test(line))
+        .join("\n");
+      assert.equal(
+        leftoverCallsGhApiToSetPages(workflowYaml),
+        false,
+        `${name} must not call gh api to set Pages`,
+      );
+      const deploys = /actions\/(?:upload-pages-artifact|deploy-pages)@/.test(workflowYaml);
+      if (deploys) {
+        assert.match(workflowYaml, /actions\/upload-pages-artifact@/);
+        assert.match(workflowYaml, /actions\/deploy-pages@/);
+        assert.doesNotMatch(workflowYaml, /enablement:\s*true/);
+      }
     }
   });
 });
