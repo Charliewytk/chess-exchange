@@ -1,5 +1,8 @@
 # Static FEN→WDL demo only (docs/). Play money, not a book.
 # No npm start, no live exchange, no chess.com login, no credentials.
+# Charles still has one remaining click (agents never click Settings):
+# Settings → Pages → Source = GitHub Actions
+# Then Save. Do not enable Pages from this workflow. Do not touch the owner user-site.
 name: Deploy Pages demo
 
 on:
@@ -22,6 +25,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      # Fails with "Get Pages site failed" until Charles clicks
+      # Settings → Pages → Source = GitHub Actions
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload docs/

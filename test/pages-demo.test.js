@@ -120,4 +120,59 @@ describe("GitHub Pages demo (static FEN → WDL)", () => {
     assert.match(readme, /play money/i);
     assert.doesNotMatch(readme, /https:\/\/[\w.-]*gumroad\.com\/l\/[A-Za-z0-9-]+/);
   });
+
+  it("README and Pages workflow make Settings → Pages → Source = GitHub Actions unmissable", () => {
+    const click = "Settings → Pages → Source = GitHub Actions";
+    const readme = readFileSync(join(root, "README.md"), "utf8");
+    const workflow = readFileSync(join(root, ".github/workflows/pages.yml"), "utf8");
+
+    assert.match(readme, /\[!IMPORTANT\]/);
+    assert.match(readme, /agents never click Settings/i);
+    assert.ok(readme.includes(click), `README must spell the leftover click as ${click}`);
+    assert.match(readme, /https:\/\/github\.com\/Charliewytk\/chess-exchange\/settings\/pages/);
+
+    const workflowComments = workflow
+      .split("\n")
+      .filter((line) => /^\s*#/.test(line))
+      .join("\n");
+    const workflowYaml = workflow
+      .split("\n")
+      .filter((line) => !/^\s*#/.test(line))
+      .join("\n");
+    assert.ok(
+      workflowComments.includes(click),
+      `pages.yml comments must spell the leftover click as ${click}`,
+    );
+    assert.match(workflowComments, /agents never click Settings/i);
+    assert.doesNotMatch(workflowYaml, /enablement:\s*true/);
+    assert.doesNotMatch(workflowYaml, /CHESS\.COM_|PASSWORD|SECRET_KEY|login\.chess/i);
+    assert.doesNotMatch(workflow, /launchd/i);
+  });
+
+  it("github.io first-fold and demo load graph stay the FEN engine page", () => {
+    const html = readFileSync(join(root, "docs/index.html"), "utf8");
+    const firstFold = html.split(/<aside\b/)[0];
+
+    assert.match(firstFold, /<title>Chess Exchange — engine demo \(play money\)<\/title>/);
+    assert.match(firstFold, /play money · engine demo/);
+    assert.match(firstFold, /Paste a FEN/);
+    assert.match(firstFold, /id="fen"/);
+    assert.match(firstFold, /rnbqkbnr\/pppppppp\/8\/8\/8\/8\/PPPPPPPP\/RNBQKBNR w KQkq - 0 1/);
+    assert.match(firstFold, />Evaluate<\/button>/);
+    assert.match(firstFold, />Starting position<\/button>/);
+    assert.match(firstFold, />Mate in one \(White\)<\/button>/);
+    assert.doesNotMatch(firstFold, /Settings → Pages/);
+    assert.doesNotMatch(firstFold, /GitHub Actions/);
+    assert.doesNotMatch(firstFold, /Gumroad/i);
+
+    assert.match(html, /href="\.\/style\.css"/);
+    assert.match(html, /src="\.\/demo\.js"/);
+    const demo = readFileSync(join(root, "docs/demo.js"), "utf8");
+    const evaluate = readFileSync(join(root, "docs/evaluate.js"), "utf8");
+    assert.match(demo, /from ["']\.\/evaluate\.js["']/);
+    assert.match(evaluate, /from ["']\.\/engine\.js["']/);
+    for (const file of ["docs/style.css", "docs/demo.js", "docs/evaluate.js", "docs/engine.js"]) {
+      assert.ok(readFileSync(join(root, file), "utf8").length > 0, `${file} must stay loadable`);
+    }
+  });
 });

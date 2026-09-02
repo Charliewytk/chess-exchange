@@ -1,5 +1,16 @@
 # ♞ Chess Exchange
 
+> [!IMPORTANT]
+> **Charles: one remaining click. Agents never click Settings.**
+>
+> **Settings → Pages → Source = GitHub Actions**
+>
+> Open [Settings → Pages](https://github.com/Charliewytk/chess-exchange/settings/pages),
+> set **Source** to **GitHub Actions**, then Save. The project site
+> (`https://charliewytk.github.io/chess-exchange/`) 404s until you do.
+> After Save, leave Source on GitHub Actions. Agents do not enable Pages
+> from the workflow, and they do not touch `Charliewytk.github.io`.
+
 A play-money prediction market on **real chess.com games** — Polymarket-style prices,
 live game feeds, an automated market maker, and liquidity bots. An experiment; not
 affiliated with chess.com, and no real money anywhere.
@@ -18,14 +29,13 @@ Pages demo. It uses a browser-safe copy of the in-process alpha-beta in
 no-board fallback.
 
 `docs/` is deployed by GitHub Actions (`.github/workflows/pages.yml`):
-`actions/upload-pages-artifact` then `actions/deploy-pages`. Agents do
-not turn Pages on, and they do not touch `Charliewytk.github.io`. If the
-project site 404s, one click (or a later Pages click) is enough:
+`actions/upload-pages-artifact` then `actions/deploy-pages`. The leftover
+click is the same one at the top of this README:
 
-1. Open this repo on GitHub → **Settings → Pages**
-2. **Source:** GitHub Actions
-3. Save. If the first run failed before Pages was enabled, re-run
-   **Deploy Pages demo** from the Actions tab (or push to `main` again).
+**Settings → Pages → Source = GitHub Actions**
+
+Then Save. If the first run failed before Pages was enabled, a later push
+to `main` is enough — do not dispatch a paid workflow just to retry.
 
 The site will be `https://charliewytk.github.io/chess-exchange/`.
 
