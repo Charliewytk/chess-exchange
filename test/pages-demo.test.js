@@ -16,16 +16,22 @@ const MATE_IN_ONE_WHITE = "6k1/8/6K1/8/8/8/8/4Q3 w - - 0 1";
 const MATE_IN_ONE_BLACK = "4q3/8/8/8/8/6k1/8/6K1 b - - 0 1";
 
 function leftoverCallsGhApiToSetPages(source) {
-  if (!/\bgh\s+api\b/.test(source)) return false;
+  const ghApi =
+    /\bgh\s+api\b/.test(source) || /["']gh["'][\s\S]{0,240}["']api["']/.test(source);
+  if (!ghApi) return false;
   return /\/pages\b/.test(source) || /\benablement\b/.test(source);
 }
 
 function listLeftoverScripts(rootDir) {
   const found = [];
-  const scriptsDir = join(rootDir, "scripts");
-  for (const name of readdirSync(scriptsDir, { withFileTypes: true })) {
-    if (name.isFile()) found.push(join(scriptsDir, name.name));
+  function walk(dir) {
+    for (const name of readdirSync(dir, { withFileTypes: true })) {
+      const full = join(dir, name.name);
+      if (name.isDirectory()) walk(full);
+      else if (name.isFile()) found.push(full);
+    }
   }
+  walk(join(rootDir, "scripts"));
   for (const name of readdirSync(rootDir, { withFileTypes: true })) {
     if (name.isFile() && name.name.endsWith(".sh")) found.push(join(rootDir, name.name));
   }
@@ -211,6 +217,12 @@ describe("GitHub Pages demo (static FEN → WDL)", () => {
     );
     assert.equal(leftoverCallsGhApiToSetPages("console.log('login only')"), false);
     assert.equal(leftoverCallsGhApiToSetPages("gh api user"), false);
+    assert.equal(
+      leftoverCallsGhApiToSetPages(
+        'spawn("gh", ["api", "-X", "POST", "/repos/Charliewytk/chess-exchange/pages"])',
+      ),
+      true,
+    );
   });
 
   it("leftover scripts do not call gh api to set Pages; deploy stays the Actions path", () => {
