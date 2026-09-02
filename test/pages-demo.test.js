@@ -126,10 +126,13 @@ describe("GitHub Pages demo (static FEN → WDL)", () => {
     const readme = readFileSync(join(root, "README.md"), "utf8");
     const workflow = readFileSync(join(root, ".github/workflows/pages.yml"), "utf8");
 
-    assert.match(readme, /\[!IMPORTANT\]/);
-    assert.match(readme, /agents never click Settings/i);
+    const firstHeading = readme.indexOf("\n## ");
+    const fold = firstHeading === -1 ? readme : readme.slice(0, firstHeading);
+    assert.match(fold, /\[!IMPORTANT\]/);
+    assert.match(fold, /agents never click Settings/i);
+    assert.ok(fold.includes(click), `README first fold must spell the leftover click as ${click}`);
+    assert.match(fold, /https:\/\/github\.com\/Charliewytk\/chess-exchange\/settings\/pages/);
     assert.ok(readme.includes(click), `README must spell the leftover click as ${click}`);
-    assert.match(readme, /https:\/\/github\.com\/Charliewytk\/chess-exchange\/settings\/pages/);
 
     const workflowComments = workflow
       .split("\n")

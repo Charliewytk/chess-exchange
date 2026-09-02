@@ -6,10 +6,11 @@
 > **Settings → Pages → Source = GitHub Actions**
 >
 > Open [Settings → Pages](https://github.com/Charliewytk/chess-exchange/settings/pages),
-> set **Source** to **GitHub Actions**, then Save. The project site
-> (`https://charliewytk.github.io/chess-exchange/`) 404s until you do.
-> After Save, leave Source on GitHub Actions. Agents do not enable Pages
-> from the workflow, and they do not touch `Charliewytk.github.io`.
+> set **Source** to **GitHub Actions**, then Save. That unblocks the next
+> deploy. The project site (`https://charliewytk.github.io/chess-exchange/`)
+> stays 404 until **Deploy Pages demo** succeeds. After Save, leave Source
+> on GitHub Actions. Agents do not enable Pages from the workflow, do not
+> dispatch the workflow, and they do not touch `Charliewytk.github.io`.
 
 A play-money prediction market on **real chess.com games** — Polymarket-style prices,
 live game feeds, an automated market maker, and liquidity bots. An experiment; not
@@ -34,8 +35,9 @@ click is the same one at the top of this README:
 
 **Settings → Pages → Source = GitHub Actions**
 
-Then Save. If the first run failed before Pages was enabled, a later push
-to `main` is enough — do not dispatch a paid workflow just to retry.
+Then Save. If the first run failed before Pages was enabled, re-run the
+failed **Deploy Pages demo** job (or wait for the next push to `main`).
+Agents do not dispatch the workflow.
 
 The site will be `https://charliewytk.github.io/chess-exchange/`.
 

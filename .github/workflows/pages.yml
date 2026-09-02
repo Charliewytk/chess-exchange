@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v4
       # Fails with "Get Pages site failed" until Charles clicks
       # Settings → Pages → Source = GitHub Actions
-      - name: Configure Pages
+      - name: Configure Pages (needs Settings → Pages → Source = GitHub Actions)
         uses: actions/configure-pages@v5
       - name: Upload docs/
         uses: actions/upload-pages-artifact@v5
